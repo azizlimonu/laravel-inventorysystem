@@ -29,7 +29,7 @@ class ProductController extends Controller
         $product = Product::create($request->all());
 
         return response([
-            'message' => 'Se creo el producto',
+            'message' => 'Create Product Success',
             'product' => $product
         ]);
     }
@@ -37,15 +37,29 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $term)
+    // public function show(string $term)
+    // {
+    //     $product = Product::where('id', $term)
+    //         ->orWhere('slug', $term)
+    //         ->get()[0];
+
+    //     if (!$product) {
+    //         return response()->json([
+    //             'message' => 'Theres no product'
+    //         ], 404);
+    //     }
+
+    //     return new ProductResource($product);
+    // }
+    public function show($term)
     {
         $product = Product::where('id', $term)
             ->orWhere('slug', $term)
-            ->get()[0];
+            ->first();
 
         if (!$product) {
             return response()->json([
-                'message' => 'No se encontro el producto'
+                'message' => 'No product found'
             ], 404);
         }
 
@@ -72,7 +86,8 @@ class ProductController extends Controller
         $product->update($request->all());
 
         return response([
-            'message' => 'Product fetch success'
+            'message' => 'Product updated successfully',
+            'product' => $product
         ]);
     }
 
