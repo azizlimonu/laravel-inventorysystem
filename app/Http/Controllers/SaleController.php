@@ -16,7 +16,7 @@ class SaleController extends Controller
      */
     public function index()
     {
-        return new SaleCollection( Sale::all() );
+        return new SaleCollection(Sale::all());
     }
 
     /**
@@ -36,8 +36,7 @@ class SaleController extends Controller
         $product_sale = [];
 
         // Iteramos los productos de la request
-        foreach ($products as $product)
-        {
+        foreach ($products as $product) {
             $product_sale[] = [
                 'sale_id' => $sale['id'],
                 'product_id' => $product['id'],
@@ -50,8 +49,7 @@ class SaleController extends Controller
             // Actualizar stock de cada producto
             $product_updated = Product::find($product['id']);
 
-            if( $product['quantity'] > $product_updated['stock'] )
-            {
+            if ($product['quantity'] > $product_updated['stock']) {
                 return response(['meessage' => 'No hay stock suficiente'], 400);
             }
 
@@ -61,7 +59,7 @@ class SaleController extends Controller
 
         ProductSale::insert($product_sale);
 
-        return response(['meessage' => 'Venta realizada con exito']);
+        return response(['meessage' => 'sales update']);
     }
 
     /**

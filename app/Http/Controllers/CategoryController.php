@@ -21,15 +21,17 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-
+        // Validate the request using the specified form request
         $request->validated();
 
+        // Create a slug for the category based on its name
         $request['slug'] = $this->create_slug($request['name']);
 
+        // Store the category in the database
         Category::create($request->all());
 
         return response([
-            'message' => 'Se creo la categoría'
+            'message' => 'Category created successfully'
         ]);
     }
 
@@ -38,13 +40,14 @@ class CategoryController extends Controller
      */
     public function show(string $term)
     {
+        // Find a category by ID or slug
         $category = Category::where('id', $term)
             ->orWhere('slug', $term)
             ->get();
 
-        if ( count($category) == 0 ) {
+        if (count($category) == 0) {
             return response()->json([
-                'message' => 'No se encontro la categoría'
+                'message' => 'Category not found'
             ], 404);
         }
 
@@ -56,21 +59,21 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // Find the category by ID
         $category = Category::find($id);
 
-        if ( !$category ) {
+        if (!$category) {
             return response()->json([
-                'message' => 'No se encontro la categoría'
+                'message' => 'Category not found'
             ], 404);
         }
 
-        // $category = $this->show($id);
-
+        // Update the category and create a new slug
         $request['slug'] = $this->create_slug($request['name']);
         $category->update($request->all());
 
         return response([
-            'message' => 'La categoria fue actualizada'
+            'message' => 'Category updated successfully'
         ]);
     }
 
@@ -79,26 +82,30 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
+        // Find the category by ID
         $category = Category::find($id);
-        
-        if ( !$category ) {
+
+        if (!$category) {
             return response()->json([
-                'message' => 'No se encontro la categoría'
+                'message' => 'Category not found'
             ], 404);
         }
 
+        // Delete the category
         $category->delete();
         return response([
-            'message' => 'La categoria fue eliminada'
+            'message' => 'Category deleted successfully'
         ]);
     }
 
-
+    /**
+     * Create a slug from the given text.
+     */
     function create_slug($text)
     {
         $text = strtolower($text);
 
-        // Expresiones regulares
+        // Regular expressions
         $text = preg_replace('/[^a-z0-9]+/', '-', $text);
         $text = trim($text, '-');
 

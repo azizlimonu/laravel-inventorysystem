@@ -32,7 +32,6 @@ class ProductController extends Controller
             'message' => 'Se creo el producto',
             'product' => $product
         ]);
-
     }
 
     /**
@@ -62,19 +61,18 @@ class ProductController extends Controller
 
         if (!$product) {
             return response()->json([
-                'message' => 'No se encontro el producto'
+                'message' => 'No product selected'
             ], 404);
         }
 
-        if( $request['name'] )
-        {
+        if ($request['name']) {
             $request['slug'] = $this->create_slug($request['name']);
         }
 
         $product->update($request->all());
 
         return response([
-            'message' => 'El producto fue actualizado'
+            'message' => 'Product fetch success'
         ]);
     }
 
@@ -87,13 +85,13 @@ class ProductController extends Controller
 
         if (!$product) {
             return response()->json([
-                'message' => 'No se encontro el producto'
+                'message' => 'No product selected'
             ], 404);
         }
 
         $product->delete();
         return response([
-            'message' => 'El producto fue eliminado'
+            'message' => 'product deleted'
         ]);
     }
 
